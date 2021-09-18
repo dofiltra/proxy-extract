@@ -1,11 +1,11 @@
-import { extractProxy } from '../index'
+// import { extractProxy } from '../index'
 
-test('extractProxy', async () => {
-  expect(
-    (
-      await extractProxy({
-        count: 1
-      })
-    ).length
-  ).toBe(1)
-})
+// test('extractProxy', async () => {
+//   expect(
+//     (
+//       await extractProxy({
+//         count: 1
+//       })
+//     ).length
+//   ).toBe(1)
+// })
