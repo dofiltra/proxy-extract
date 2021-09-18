@@ -49,7 +49,9 @@ async function isOkProxy(proxy: ProxyList.IFreeProxy) {
       const response = await fetch('https://httpbin.org/ip?json', { agent: proxyAgent })
       const body = await response.text()
       return body?.includes(proxy.ip)
-    } catch {}
+    } catch {
+        // false
+    }
   })()
 
   return !!result
