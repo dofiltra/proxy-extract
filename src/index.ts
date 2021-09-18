@@ -1,6 +1,7 @@
 import ProxyList from 'free-proxy'
 import { sleep } from 'time-helpers'
 
+
 export type TProxyExtractOpts = {
   tryLimit?: number
 }
@@ -16,6 +17,7 @@ async function extractProxy(opts: TProxyExtractOpts, tryIndex = 0): Promise<Prox
 
   try {
     const proxies = await proxyList.get()
+    console.log(proxies)
     return await Promise.all(proxies.filter(async (p) => await isOkProxy(p)))
   } catch (error) {
     await sleep(3e3 + tryIndex * 1000)
@@ -24,5 +26,8 @@ async function extractProxy(opts: TProxyExtractOpts, tryIndex = 0): Promise<Prox
 }
 
 async function isOkProxy(proxy: ProxyList.IFreeProxy) {
+   
   return false
 }
+
+extractProxy({ tryLimit: 5 }).then((x) => console.log(x))
