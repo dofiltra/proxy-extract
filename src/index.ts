@@ -50,7 +50,7 @@ async function isOkProxy(proxy: ProxyList.IFreeProxy) {
       const body = await response.text()
       return body?.includes(proxy.ip)
     } catch {
-        // false
+      // false
     }
   })()
 

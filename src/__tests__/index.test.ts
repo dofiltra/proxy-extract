@@ -1,5 +1,11 @@
-// import { Greeter } from '../index';
+import { extractProxy } from '../index'
 
-// test('My Greeter', () => {
-//   expect(Greeter('Carl')).toBe('Hello Carl');
-// });
+test('extractProxy', async () => {
+  expect(
+    (
+      await extractProxy({
+        count: 1
+      })
+    ).length
+  ).toBe(1)
+})
