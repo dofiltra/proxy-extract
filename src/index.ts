@@ -8,7 +8,7 @@ export type TProxyExtractOpts = {
   tryLimit?: number
 }
 
-async function extractProxy(opts: TProxyExtractOpts, tryIndex = 0): Promise<ProxyList.IFreeProxy[]> {
+export async function extractProxy(opts: TProxyExtractOpts, tryIndex = 0): Promise<ProxyList.IFreeProxy[]> {
   const { tryLimit = 1, count = 1 } = opts
 
   if (tryIndex >= tryLimit) {
