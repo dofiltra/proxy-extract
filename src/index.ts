@@ -56,3 +56,5 @@ async function isOkProxy(proxy: ProxyList.IFreeProxy) {
 
   return !!result
 }
+
+export { ProxyList }
