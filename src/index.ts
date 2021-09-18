@@ -1,13 +1,15 @@
 import ProxyList from 'free-proxy'
 import { sleep } from 'time-helpers'
-
+import fetch from 'node-fetch'
+import HttpsProxyAgent from 'https-proxy-agent'
 
 export type TProxyExtractOpts = {
+  count?: number
   tryLimit?: number
 }
 
 async function extractProxy(opts: TProxyExtractOpts, tryIndex = 0): Promise<ProxyList.IFreeProxy[]> {
-  const { tryLimit = 1 } = opts
+  const { tryLimit = 1, count = 1 } = opts
 
   if (tryIndex >= tryLimit) {
     return []
@@ -17,17 +19,38 @@ async function extractProxy(opts: TProxyExtractOpts, tryIndex = 0): Promise<Prox
 
   try {
     const proxies = await proxyList.get()
-    console.log(proxies)
-    return await Promise.all(proxies.filter(async (p) => await isOkProxy(p)))
+    return await getProxyLimit(proxies, count)
   } catch (error) {
     await sleep(3e3 + tryIndex * 1000)
     return await extractProxy(opts, ++tryIndex)
   }
 }
 
-async function isOkProxy(proxy: ProxyList.IFreeProxy) {
-   
-  return false
+async function getProxyLimit(proxies: ProxyList.IFreeProxy[], count: number) {
+  const result: ProxyList.IFreeProxy[] = []
+
+  for (const proxy of proxies) {
+    if (result.length >= count) {
+      break
+    }
+
+    if (await isOkProxy(proxy)) {
+      result.push(proxy)
+    }
+  }
+
+  return result
 }
 
-extractProxy({ tryLimit: 5 }).then((x) => console.log(x))
+async function isOkProxy(proxy: ProxyList.IFreeProxy) {
+  const result = await (async () => {
+    try {
+      const proxyAgent = HttpsProxyAgent(`${proxy.protocol}://${proxy.ip}:${proxy.port}`)
+      const response = await fetch('https://httpbin.org/ip?json', { agent: proxyAgent })
+      const body = await response.text()
+      return body?.includes(proxy.ip)
+    } catch {}
+  })()
+
+  return !!result
+}

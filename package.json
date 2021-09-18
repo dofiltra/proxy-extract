@@ -42,7 +42,9 @@
   ],
   "dependencies": {
     "free-proxy": "^0.2.0",
+    "https-proxy-agent": "^5.0.0",
     "is-running-process": "^1.0.0",
+    "node-fetch": "^3.0.0",
     "time-helpers": "^1.0.0"
   }
 }
